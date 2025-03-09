@@ -17,7 +17,7 @@ public class OpenAiCodeReview {
         System.out.println("测试执行");
 
         // 1. 代码检出
-        ProcessBuilder processBuilder = new ProcessBuilder("git", "diff", "HEAD-1", "HEAD");
+        ProcessBuilder processBuilder = new ProcessBuilder("git", "diff", "HEAD~1", "HEAD");
         processBuilder.directory(new File("."));
 
         Process process = processBuilder.start();
