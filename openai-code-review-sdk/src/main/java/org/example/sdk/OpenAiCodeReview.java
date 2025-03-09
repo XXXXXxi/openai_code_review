@@ -1,13 +1,16 @@
 package org.example.sdk;
 
 import com.alibaba.fastjson2.JSON;
+import org.example.sdk.domain.model.ChatCompletionRequest;
 import org.example.sdk.domain.model.ChatCompletionSyncResponse;
+import org.example.sdk.domain.model.Model;
 import org.example.sdk.types.utils.BearerTokenUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 /**
  * @Classname OpenAiCodeReview
@@ -60,20 +63,15 @@ public class OpenAiCodeReview {
         connection.setRequestProperty("User-Agent","Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
         connection.setDoOutput(true);
 
-        String code = diffCode;
-
-        String jsonInputString  = "{"
-                + "\"model\":\"glm-4-flash\","
-                + "\"messages\": ["
-                + "    {"
-                + "        \"role\": \"user\","
-                + "        \"content\": \"你是一个高级编程架构师，精通各类场景方案、架构设计和编程语言请，请您根据git diff记录，对代码做出评审。代码为: " + code + "\""
-                + "    }"
-                + "]"
-                + "}";
+        ChatCompletionRequest chatCompletionRequest = new ChatCompletionRequest();
+        chatCompletionRequest.setModel(Model.GLM_4_FLASH.getCode());
+        chatCompletionRequest.setMessages(new ArrayList<ChatCompletionRequest.Prompt>() {{
+            add(new ChatCompletionRequest.Prompt("user","\"你是一个高级编程架构师，精通各类场景方案、架构设计和编程语言请，请您根据git diff记录，对代码做出评审。代码为: \""));
+            add(new ChatCompletionRequest.Prompt("user",diffCode));
+        }});
 
         try (OutputStream os = connection.getOutputStream()){
-            byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+            byte[] input = JSON.toJSONString(chatCompletionRequest).getBytes(StandardCharsets.UTF_8);
             os.write(input);
         }
 
