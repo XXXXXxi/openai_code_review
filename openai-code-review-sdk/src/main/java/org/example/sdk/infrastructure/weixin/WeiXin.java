@@ -30,7 +30,7 @@ public class WeiXin {
         this.appid = appid;
         this.secret = secret;
         this.touser = touser;
-        template_id = templateId;
+        this.template_id = templateId;
     }
 
     public void sendTemplateMessage(String logUrl, Map<String, Map<String,String>> data) throws Exception {
