@@ -10,6 +10,11 @@ public class TemplateMessageDTO {
     private String url = "https://www.baidu.com";
     private Map<String, Map<String, String>> data = new HashMap<>();
 
+    public TemplateMessageDTO(String touser, String templateId) {
+        this.touser = touser;
+        this.template_id = templateId;
+    }
+
     public void put(String key, String value) {
         data.put(key, new HashMap<String, String>() {
             private static final long serialVersionUID = 7092338402387318563L;
