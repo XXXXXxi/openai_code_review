@@ -36,6 +36,8 @@ public class WeiXin {
     public void sendTemplateMessage(String logUrl, Map<String, Map<String,String>> data) throws Exception {
         String accessToken = WXAccessTokenUtils.getAccessToken(appid,secret);
 
+        logger.info("appid: " + appid + " template_id: " + template_id);
+
         TemplateMessageDTO templateMessageDTO = new TemplateMessageDTO();
         templateMessageDTO.setData(data);
         templateMessageDTO.setUrl(logUrl);
