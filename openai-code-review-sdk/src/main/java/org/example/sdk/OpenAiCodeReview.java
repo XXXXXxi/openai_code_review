@@ -136,7 +136,7 @@ public class OpenAiCodeReview {
 
         git.add().addFilepattern(dateFolderName + "/" + fileName).call();
         git.commit().setMessage("Add new File").call();
-        git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(token, ""));
+        git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(token, "")).call();
 
         return "https://github.com/XXXXXxi/openai-code-review-log/blob/master/" + dateFolderName + "/" + fileName;
     }
