@@ -115,7 +115,7 @@ public class OpenAiCodeReview {
     private static String writeLog(String token,String log) throws Exception {
 
         Git git = Git.cloneRepository()
-                .setURI("https://github.com/XXXXXxi/openai-code-review-log")
+                .setURI("https://github.com/XXXXXxi/openai-code-review-log.git")
                 .setDirectory(new File("repo"))
                 .setCredentialsProvider(new UsernamePasswordCredentialsProvider(token, ""))
                 .call();
@@ -128,7 +128,7 @@ public class OpenAiCodeReview {
 
 
         String fileName = new Random().nextLong() + ".md";
-        File file = new File(dateFolderName, fileName);
+        File file = new File(dateFolder, fileName);
 
         try (FileWriter writer = new FileWriter(file)){
             writer.write(log);
@@ -138,6 +138,6 @@ public class OpenAiCodeReview {
         git.commit().setMessage("Add new File").call();
         git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(token, ""));
 
-        return "https://github.com/XXXXXxi/openai-code-review-log/blob/master" + dateFolderName + "/" + fileName;
+        return "https://github.com/XXXXXxi/openai-code-review-log/blob/master/" + dateFolderName + "/" + fileName;
     }
 }
