@@ -6,7 +6,7 @@ import java.util.Map;
 public class Message {
 
     private String touser = "oVU347BTSRAKPrLMCyVey7NjpXDg";
-    private String template_id = "GLlAM-RdtKXXfwt2srroR7BUp0IhGBR4JR7e4uHCSwe5CDgmo";
+    private String template_id = "RdtKXXfwt2srroR7BUp0IhGBR4JR7e4uHCSwe5CDgmo";
     private String url = "https://www.baidu.com";
     private Map<String, Map<String, String>> data = new HashMap<>();
 
