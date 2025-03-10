@@ -41,7 +41,7 @@ public class WeiXin {
         TemplateMessageDTO templateMessageDTO = new TemplateMessageDTO(touser, template_id);;
         templateMessageDTO.setData(data);
         templateMessageDTO.setUrl(logUrl);
-        logger.info("openai-code-review weixin template message! {}",JSON.toJSONString(data));
+        logger.info("openai-code-review weixin template message! {}",JSON.toJSONString(templateMessageDTO));
         String urlString = String.format("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s", accessToken);
 
         URL url = new URL(urlString);
