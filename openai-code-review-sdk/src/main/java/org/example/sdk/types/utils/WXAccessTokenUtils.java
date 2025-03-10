@@ -16,6 +16,10 @@ public class WXAccessTokenUtils {
 
 
     public static String getAccessToken() {
+        return getAccessToken(APPID,SECRET);
+    }
+
+    public static String getAccessToken(String APPID,String SECRET) {
         try {
             String urlString = String.format(URL_TEMPLATE,GRANT_TYPE,APPID,SECRET);
             URL url = new URL(urlString);
