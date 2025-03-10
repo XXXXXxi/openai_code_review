@@ -80,6 +80,7 @@ public class OpenAiCodeReview {
         message.put("review",logUrl);
         message.setUrl(logUrl);
 
+        System.out.println("message: " + JSON.toJSONString(message));
         String url = String.format("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s", accessToken);
         sendPostRequest(url, JSON.toJSONString(message));
     }
