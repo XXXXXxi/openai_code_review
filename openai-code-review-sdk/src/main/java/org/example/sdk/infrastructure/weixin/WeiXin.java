@@ -39,7 +39,7 @@ public class WeiXin {
         TemplateMessageDTO templateMessageDTO = new TemplateMessageDTO();
         templateMessageDTO.setData(data);
         templateMessageDTO.setUrl(logUrl);
-
+        logger.info("openai-code-review weixin template message! {}",JSON.toJSONString(data));
         String urlString = String.format("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s", accessToken);
 
         URL url = new URL(urlString);
@@ -56,7 +56,7 @@ public class WeiXin {
 
         try (Scanner scanner = new Scanner(conn.getInputStream(), StandardCharsets.UTF_8.name())) {
             String response = scanner.useDelimiter("\\A").next();
-            logger.info("openai-code-review weixin template message! {}",response);
+            logger.info("openai-code-review weixin template message done! {}",response);
         }
     }
 }
