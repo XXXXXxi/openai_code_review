@@ -1,6 +1,10 @@
 package org.example.sdk;
 
 import com.alibaba.fastjson2.JSON;
+import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.example.sdk.domain.model.ChatCompletionRequest;
 import org.example.sdk.domain.model.ChatCompletionSyncResponse;
 import org.example.sdk.domain.model.Model;
@@ -10,7 +14,11 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
+import java.util.stream.DoubleStream;
 
 /**
  * @Classname OpenAiCodeReview
@@ -21,7 +29,12 @@ import java.util.ArrayList;
 public class OpenAiCodeReview {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("测试执行");
+        System.out.println("openai 代码评审，测试执行");
+
+        String token = System.getenv("GITHUB_TOKEN");
+        if (null == token || token.isEmpty()) {
+            throw new RuntimeException("token is null");
+        }
 
         // 1. 代码检出
         ProcessBuilder processBuilder = new ProcessBuilder("git", "diff", "HEAD~1", "HEAD");
@@ -47,6 +60,9 @@ public class OpenAiCodeReview {
 
         String log = codeReview(diffCode.toString());
         System.out.println("code review： " + log);
+
+        // 3. 写入评审日志
+        writeLog(token,log);
 
     }
 
@@ -94,5 +110,34 @@ public class OpenAiCodeReview {
         System.out.println(response.getChoices().get(0).getMessage().getContent());
 
         return response.getChoices().get(0).getMessage().getContent();
+    }
+
+    private static String writeLog(String token,String log) throws Exception {
+
+        Git git = Git.cloneRepository()
+                .setURI("https://github.com/XXXXXxi/openai-code-review-log")
+                .setDirectory(new File("repo"))
+                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(token, ""))
+                .call();
+
+        String dateFolderName = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        File dateFolder = new File("repo/" + dateFolderName);
+        if (!dateFolder.exists()) {
+            dateFolder.mkdirs();
+        }
+
+
+        String fileName = new Random().nextLong() + ".md";
+        File file = new File(dateFolderName, fileName);
+
+        try (FileWriter writer = new FileWriter(file)){
+            writer.write(log);
+        }
+
+        git.add().addFilepattern(dateFolderName + "/" + fileName).call();
+        git.commit().setMessage("Add new File").call();
+        git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(token, ""));
+
+        return "https://github.com/XXXXXxi/openai-code-review-log/blob/master" + dateFolderName + "/" + fileName;
     }
 }
