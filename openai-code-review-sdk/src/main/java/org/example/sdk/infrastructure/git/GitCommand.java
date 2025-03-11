@@ -92,7 +92,7 @@ public class GitCommand {
             throw new RemoteException("Failed to get diff, exit code: " + exitCode);
         }
 
-        return diffReader.toString();
+        return diffCode.toString();
 
     }
 
