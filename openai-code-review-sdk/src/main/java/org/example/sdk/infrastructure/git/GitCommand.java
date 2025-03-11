@@ -65,6 +65,7 @@ public class GitCommand {
     }
 
     public String diff() throws IOException, InterruptedException {
+        logger.info("openai-code-review get latest commit hash!");
         ProcessBuilder logProcessBuilder = new ProcessBuilder("git", "log", "-1", "--pretty=format:%H");
         logProcessBuilder.directory(new File("."));
         Process logProcess = logProcessBuilder.start();
@@ -74,6 +75,7 @@ public class GitCommand {
         logReader.close();
         logProcess.waitFor();
 
+        logger.info("openai-code-review get diff code!");
         ProcessBuilder diffProcessBuilder = new ProcessBuilder("git", "diff", latestCommitHash+"^", latestCommitHash);
         diffProcessBuilder.directory(new File("."));
         Process diffProcess = diffProcessBuilder.start();
@@ -92,7 +94,9 @@ public class GitCommand {
             throw new RemoteException("Failed to get diff, exit code: " + exitCode);
         }
 
+        logger.info("openai-code-review diff code" + diffCode);
         return diffCode.toString();
+
 
     }
 
