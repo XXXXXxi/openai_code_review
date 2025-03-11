@@ -3,10 +3,10 @@ name: Build and Run OpenAiCodeReview By Main Maven Jar
 on:
   push:
     branches:
-      - master-close
+      - master
   pull_request:
     branches:
-      - master-close
+      - master
 
 jobs:
   build:
@@ -24,11 +24,11 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Create libs directory
+        run: mkdir -p ./libs
 
-      - name: Copy openai-code-review-sdk JAR
-        run: mvn dependency:copy -Dartifact=org.example:openai-code-review-sdk:1.0 -DoutputDirectory=./libs
+      - name: Download openai-code-review-sdk JAR
+        run: wget -O ./libs/openai-code-review-sdk-1.0.jar https://github.com/XXXXXxi/openai_code_review/releases/download/v1.0/openai-code-review-sdk-1.0.jar
 
       - name: Get repository name
         id: repo-name
@@ -52,15 +52,13 @@ jobs:
           echo "Branch name is ${{ env.BRANCH_NAME }}"
           echo "Commit author is ${{ env.COMMIT_AUTHOR }}"
           echo "Commit message is ${{ env.COMMIT_MESSAGE }}"      
-          echo "CODE_REVIEW_LOG_URI is ${{ secrets.CODE_REVIEW_LOG_URI }}"      
-          echo "CODE_TOKEN is ${{ secrets.CODE_TOKEN }}"      
 
       - name: Run Code Review
         run: java -jar ./libs/openai-code-review-sdk-1.0.jar
         env:
           # Github 配置；GITHUB_REVIEW_LOG_URI「https://github.com/xfg-studio-project/openai-code-review-log」、GITHUB_TOKEN「https://github.com/settings/tokens」
-          CODE_REVIEW_LOG_URI: ${{ secrets.CODE_REVIEW_LOG_URI }}
-          CODE_TOKEN: ${{ secrets.CODE_TOKEN }}
+          GITHUB_REVIEW_LOG_URI: ${{ secrets.CODE_REVIEW_LOG_URI }}
+          GITHUB_TOKEN: ${{ secrets.CODE_TOKEN }}
           COMMIT_PROJECT: ${{ env.REPO_NAME }}
           COMMIT_BRANCH: ${{ env.BRANCH_NAME }}
           COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}
