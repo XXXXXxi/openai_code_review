@@ -106,7 +106,7 @@ public class GitCommand {
                 .setDirectory(new File("repo"))
                 .setCredentialsProvider(new UsernamePasswordCredentialsProvider(githubToken, ""))
                 .call();
-
+        logger.info("openai-code-review commit and push recommend: " + recommend);
         // 创建分支
         String dateFolderName = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         File dateFolder = new File("repo/" + dateFolderName);
@@ -116,7 +116,7 @@ public class GitCommand {
 
         String fileName = project + "-" + branch + "-" + author + "-" + System.currentTimeMillis() + "-" + RandomStringUtils.generateAlphabetic(4)  + ".md";
         File newFile = new File(dateFolder, fileName);
-
+        logger.info("openai-code-review commit and push filename: " + fileName);
         try (FileWriter writer = new FileWriter(newFile)){
             writer.write(recommend);
         }
@@ -125,7 +125,7 @@ public class GitCommand {
         git.commit().setMessage("Add new File").call();
         git.push().setCredentialsProvider(new UsernamePasswordCredentialsProvider(githubToken, "")).call();
 
-        logger.info("openai-code-review git commit and push done! {}",fileName);
+        logger.info("openai-code-review git commit and push done! {}", fileName);
 
         return githubReviewLogUri + "blob/master/" + dateFolderName + "/" + fileName;
     }
