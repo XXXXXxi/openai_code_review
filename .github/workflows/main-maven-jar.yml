@@ -52,9 +52,8 @@ jobs:
           echo "Branch name is ${{ env.BRANCH_NAME }}"
           echo "Commit author is ${{ env.COMMIT_AUTHOR }}"
           echo "Commit message is ${{ env.COMMIT_MESSAGE }}"      
-          echo "CODE_REVIEW_LOG_URI is ${{ env.CODE_REVIEW_LOG_URI }}"      
-          echo "CODE_REVIEW_LOG_URI is ${{ env.CODE_REVIEW_LOG_URI }}"      
-          echo "CODE_TOKEN is ${{ env.CODE_TOKEN }}"      
+          echo "CODE_REVIEW_LOG_URI is ${{ secrets.CODE_REVIEW_LOG_URI }}"      
+          echo "CODE_TOKEN is ${{ secrets.CODE_TOKEN }}"      
 
       - name: Run Code Review
         run: java -jar ./libs/openai-code-review-sdk-1.0.jar
